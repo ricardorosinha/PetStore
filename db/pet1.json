@@ -1,0 +1,18 @@
+{
+  "id": 1904090598,
+  "category": {
+    "id": 1,
+    "name": "dog"
+  },
+  "name": "Max",
+  "photoUrls": [
+    "string"
+  ],
+  "tags": [
+    {
+      "id": 2021,
+      "name": "STA"
+    }
+  ],
+  "status": "available"
+}
