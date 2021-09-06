@@ -2,7 +2,6 @@
 package petstore;
 
 //2 - Library
-import io.restassured.specification.Argument;
 import org.testng.annotations.Test;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -22,13 +21,12 @@ public class Pet {
     }
 
     //Include - Create - Post
-    @Test  //identifies the method of function as a test for TestNG
+    @Test(priority = 1)  //identifies the method of function as a test for TestNG
     public void includePet() throws IOException {
         String jsonBody = readJson("db/pet1.json");
 
         //Gherkin Syntax
         //Given - When - Then
-
         given()
                 .contentType("application/json") // in more recent apps REST API - and in older ones "text/xml"
                 .log().all()
@@ -40,11 +38,52 @@ public class Pet {
                 .statusCode(200) //status code with success
                 .body("name", is("Max"))
                 .body("status", is("available"))
-                .body("category.name", is("dog"))
+                .body("category.name", is("RR20210906PRT"))
                 .body("tags.name", contains("STA"))
         ;
 
     }
 
+    @Test(priority = 2)  //identifies the method of function as a test for TestNG
+    public void consultPet(){
+        //Attributes
+        String petId = "1904090598";
+        String token =
+        //Get Pet from petId
+        given()
+                .contentType("application/json")
+                .log().all()
+        .when()
+                .get(uri + "/" + petId)
+        .then()
+                .log().all()
+                .statusCode(200)
+                .body("name", is("Max"))
+                .body("status", is("available"))
+                .body("category.name", is("RR20210906PRT"))
+        .extract()
+                .path("category.name")
+        ;
+
+        System.out.println("The token is " + token);
+    }
+
+    @Test(priority = 3)
+    public void editPet () throws IOException {
+        String jsonBody = readJson("db/pet2.json");
+
+        given()
+                .contentType("application/json")
+                .log().all()
+                .body(jsonBody)
+        .when()
+                .put(uri)
+        .then()
+                .log().all()
+                .statusCode(200)
+                .body("name", is("Max"))
+                .body("status", is("sold"))
+        ;
+    }
 
 }
